@@ -1,0 +1,21 @@
+on: 
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version'     
+        required: true
+        default: 'warning'
+      package:
+        description: 'Release package'
+        required: true
+        default: 'warning'
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          VERSION: ${{ inputs.version }}
+          PACKAGE: ${{ inputs.package }}
+        run: yarn workspaces run semantic-release -e semantic-release-monorepo --tag-format='$PACKAGE-v$VERSION'
